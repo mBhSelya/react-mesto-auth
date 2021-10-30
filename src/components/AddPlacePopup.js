@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 export default function AddPlacePopup(props) {
-    const [NameCard, setNameCard] = useState('');
-    const [LinkCard, setlinkCard] = useState('');
+    const [nameCard, setNameCard] = useState('');
+    const [linkCard, setlinkCard] = useState('');
 
     function handleNameCard(e) {
         setNameCard(e.target.value);
@@ -17,8 +17,8 @@ export default function AddPlacePopup(props) {
         e.preventDefault();
 
         props.onAddPlace({
-            name: NameCard,
-            link: LinkCard
+            name: nameCard,
+            link: linkCard
         }, () => {
             setNameCard('');
             setlinkCard('');
@@ -32,9 +32,9 @@ export default function AddPlacePopup(props) {
             isOpen={props.isOpen}
             onClose={props.onClose}
             onSubmit={handleSubmit}>
-                <input onChange={handleNameCard} value={NameCard} className="popup__input popup__input_add_name" id="name-input" type="text" name="name" placeholder="Название" minLength="2" maxLength="30" required />
+                <input onChange={handleNameCard} value={nameCard} className="popup__input popup__input_add_name" id="name-input" type="text" name="name" placeholder="Название" minLength="2" maxLength="30" required />
                 <span className="name-input-error popup__input-error"></span>
-                <input onChange={handleLinkCard} value={LinkCard} className="popup__input popup__input_add_link" id="link-input" type="url" name="link" placeholder="Ссылка на картинку" required />
+                <input onChange={handleLinkCard} value={linkCard} className="popup__input popup__input_add_link" id="link-input" type="url" name="link" placeholder="Ссылка на картинку" required />
                 <span className="link-input-error popup__input-error"></span>
         </PopupWithForm>
     )

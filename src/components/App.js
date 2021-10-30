@@ -16,16 +16,16 @@ import ProtectedRoute from "./ProtectedRoute";
 import * as Auth from "../utils/Auth";
 
 function App() {
-    const [EditProfilePopupOpen, setEditProfilePopupOpened] = useState(false);
-    const [AddPlacePopupOpen, setAddPlacePopupOpened] = useState(false);
-    const [EditAvatarPopupOpen, setEditAvatarPopupOpened] = useState(false);
-    const [InfoTooltipOpen, setInfoTooltipOpened] = useState(false);
-    const [ConfirmRegister, setConfirmRegister] = useState(false);
+    const [editProfilePopupOpen, setEditProfilePopupOpened] = useState(false);
+    const [addPlacePopupOpen, setAddPlacePopupOpened] = useState(false);
+    const [editAvatarPopupOpen, setEditAvatarPopupOpened] = useState(false);
+    const [infoTooltipOpen, setInfoTooltipOpened] = useState(false);
+    const [confirmRegister, setConfirmRegister] = useState(false);
     const [selectedCard, setSelectedCard] = useState({});
-    const [CurrentUser, setCurrentUser] = useState({});
-    const [Cards, setCards] = useState([]);
-    const [LoggedIn, setLoggedIn] = useState(false);
-    const [EmailHeader, setEmailHeader] = useState('');
+    const [currentUser, setCurrentUser] = useState({});
+    const [cards, setCards] = useState([]);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [emailHeader, setEmailHeader] = useState('');
     const history = useHistory();
 
     useEffect(() => {
@@ -102,7 +102,7 @@ function App() {
     function handleAddCard(obj, func) {
         ApiConfig.postNewCard(obj)
             .then((newCard) => {
-                setCards([newCard, ...Cards]);
+                setCards([newCard, ...cards]);
                 closeAllPopups();
                 func();
             })
@@ -112,7 +112,7 @@ function App() {
     }
 
     function handleCardLike(card) {
-        const isLiked = card.likes.some(i => i._id === CurrentUser._id);
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
         
         ApiConfig.changeLikeCardStatus(card._id, isLiked)
             .then((newCard) => {
@@ -133,8 +133,8 @@ function App() {
             })
     }
 
-    function handleRegister(Email, Password) {
-        Auth.register( Password, Email )
+    function handleRegister(email, password) {
+        Auth.register( password, email )
             .then(() => {
                 setConfirmRegister(true);
                 handleInfoTooltip();
@@ -147,8 +147,8 @@ function App() {
             })
     }
 
-    function handleLogin(Email, Password) {
-        Auth.authorize(Email, Password)
+    function handleLogin(email, password) {
+        Auth.authorize(email, password)
             .then((res) => {
                 if (res.token) {
                     localStorage.setItem('jwt', res.token);
@@ -193,21 +193,21 @@ function App() {
     }, [])
     
     return (
-        <UserContext.Provider value={CurrentUser}>
+        <UserContext.Provider value={currentUser}>
             <InfoTooltip
-                isOpen={InfoTooltipOpen}
+                isOpen={infoTooltipOpen}
                 onClose={closeAllPopups}
-                isConfirm={ConfirmRegister}
+                isConfirm={confirmRegister}
             />
             <Header 
-                email={EmailHeader}
+                email={emailHeader}
             />
             <Switch>
                 <ProtectedRoute 
                     exact path="/"
-                    loggedIn={LoggedIn}
+                    loggedIn={loggedIn}
                     component={Main}
-                    cards={Cards}
+                    cards={cards}
                     onCardLike={handleCardLike}
                     onCardDelete={handleCardDelete}
                     onCardClick={handleCardClick}
@@ -229,17 +229,17 @@ function App() {
             <Footer />
             <EditProfilePopup
                 onUpdateUser={handleUpdateUser} 
-                isOpen={EditProfilePopupOpen} 
+                isOpen={editProfilePopupOpen} 
                 onClose={closeAllPopups} 
             /> 
             <EditAvatarPopup
                 onUpdateAvatar={handleUpdateAvatar}
-                isOpen={EditAvatarPopupOpen} 
+                isOpen={editAvatarPopupOpen} 
                 onClose={closeAllPopups} 
             />
             <AddPlacePopup
                 onAddPlace={handleAddCard}
-                isOpen={AddPlacePopupOpen}
+                isOpen={addPlacePopupOpen}
                 onClose={closeAllPopups}
             />
             <ImagePopup

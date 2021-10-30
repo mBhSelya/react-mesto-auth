@@ -3,6 +3,7 @@ import { UserContext } from "../context/CurrentUserContext";
 
 export default function Card(props) {
     const userData = React.useContext(UserContext);
+    
     function handleClick() {
         props.onCardClick(props.dataCard);
     }
